@@ -22,11 +22,6 @@ export class AuthService {
         }
 
         const { ...result } = user;
-        
-        if(!result.enableAccount || result.permission.find((e) => e == 'USER') != 'USER') {
-            this.logger.debug(`${userId}::${result.enableAccount? 'Permission missmatch':'Account is not enabled,'}`);
-            throw new UnauthorizedException();
-        }
 
         const payload = { properties: result };
         this.logger.debug(`${userId}::login successfully}`);
