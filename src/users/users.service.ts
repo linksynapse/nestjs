@@ -1,36 +1,38 @@
 import { Injectable } from '@nestjs/common';
-import { Role } from 'src/roles/roles.enum';
-import { User } from './model/user';
-import { Employee } from './model/employee';
-import { Settings } from './model/settings';
+import { Prisma, PrismaClient, SY_USER } from '@prisma/client';
 
 @Injectable()
 export class UsersService {
-    private users = null;
+    private prisma = new PrismaClient();
 
-    constructor(){
-        this.users = new Array<User>();
+    constructor() {}
 
-        var user = new User();
-        user.companyId = '1';
-        var employeeInfo = new Employee();
-        employeeInfo.employeeId = 'hello, world';
-        user.employeeInfo = employeeInfo;
-        user.enableAccount = true;
-        user.lastLogin = Date.now();
-        var roles = new Array<Role>();
-        roles.push(Role.USER);
-        user.roles = roles;
-        var settings = new Settings();
-        settings.language = 'ko';
-        user.settings = settings;
-        user.userId = 'administrator';
-        user.userName = 'administrator';
-        user.userPassword = '1111';
-        this.users.push(user);
+    async findOne(userWhereUniqueInput: Prisma.SY_USERWhereUniqueInput): Promise<SY_USER | undefined> {
+        return this.prisma.sY_USER.findUnique({
+            where: userWhereUniqueInput
+        });
     }
 
-    async findOne(userId: string): Promise<User | undefined> {
-        return this.users.find(user => user.userId === userId);
+    async createUser(data: Prisma.SY_USERCreateInput): Promise<SY_USER> {
+        return this.prisma.sY_USER.create({
+            data,
+        })
+    }
+
+    async updateUser(params: {
+        where: Prisma.SY_USERWhereUniqueInput;
+        data: Prisma.SY_USERUpdateInput;
+    }): Promise<SY_USER> {
+        const { where, data } = params;
+        return this.prisma.sY_USER.update({
+            data,
+            where,
+        })
+    }
+
+    async deleteUser(where: Prisma.SY_USERWhereUniqueInput): Promise<SY_USER> {
+        return this.prisma.sY_USER.delete({
+            where,
+        });
     }
 }

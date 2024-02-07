@@ -1,0 +1,47 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model SY_USER {
+  companyid  String   @db.VarChar
+  id         String   @db.VarChar
+  password   String   @db.VarChar
+  employeeid String?  @db.VarChar
+  language   String   @default("ko") @db.VarChar
+  roles      String[]
+
+  @@unique([companyid, id], map: "sy_user_companyid_idx")
+  @@map("SY.USER")
+}
+
+model SY_FRMS {
+  id    String   @unique(map: "sy_frms_id_idx") @db.VarChar
+  name  String   @db.VarChar
+  roles String[]
+
+  @@index([name], map: "sy_frms_name_idx")
+  @@map("SY.FRMS")
+}
+
+model scf100 {
+  frm_cd   String    @unique(map: "scf100_frm_cd_idx") @db.VarChar
+  dic_cd   String?   @db.VarChar
+  name     String?
+  assem_nm String?
+  work_ty  String?   @db.VarChar
+  auth_yn  String?   @db.Char(1)
+  prt_yn   String?   @db.Char(1)
+  use_yn   String?   @db.Char(1)
+  sys_yn   String?   @db.Char(1)
+  mdl_cd   String?   @db.VarChar
+  dsc      String?
+  cid      Int?
+  cdt      DateTime? @db.Date
+  mid      Int?
+  mdt      DateTime? @db.Date
+}
