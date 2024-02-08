@@ -6,9 +6,10 @@ import { UsersService } from './users/users.service';
 import { UsersModule } from './users/users.module';
 import { RoleModule } from './roles/roles.module';
 import { DataModule } from './data/data.module';
+import { HrModule } from './hr/hr.module';
 
 @Module({
-  imports: [AuthModule, UsersModule, RoleModule, DataModule],
+  imports: [AuthModule, UsersModule, RoleModule, DataModule, HrModule],
   controllers: [AppController],
   providers: [AppService, UsersService],
 })

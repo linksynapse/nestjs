@@ -8,13 +8,16 @@ datasource db {
 }
 
 model SY_USER {
-  companyid  String   @db.VarChar
-  id         String   @db.VarChar
-  password   String   @db.VarChar
-  employeeid String?  @db.VarChar
-  language   String   @default("ko") @db.VarChar
-  roles      String[]
+  user_id       String    @unique(map: "sy_user_id_idx") @db.VarChar
+  user_pw       String    @db.VarChar
+  employee_id   String?   @db.VarChar
+  language      String    @default("ko") @db.VarChar
+  roles         String[]
+  enable        Boolean   @default(false)
+  activated_dt  DateTime? @db.Timestamp(6)
+  created_dt    DateTime  @default(now()) @db.Timestamp(6)
+  suspensed_dt  DateTime? @db.Timestamp(6)
+  expiration_dt DateTime? @db.Timestamp(6)
 
-  @@unique([companyid, id], map: "sy_user_companyid_idx")
   @@map("SY.USER")
 }
