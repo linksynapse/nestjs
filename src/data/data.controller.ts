@@ -1,4 +1,4 @@
-import { Controller, Get, Request, UseGuards } from '@nestjs/common';
+import { Controller, Get, Logger, Query, Req, Request, UseGuards } from '@nestjs/common';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { Roles } from 'src/roles/roles.decorator';
 import { Role } from 'src/roles/roles.enum';
@@ -7,19 +7,14 @@ import { DataService } from './data.service';
 
 @Controller('data')
 export class DataController {
-
+    private readonly logger = new Logger(DataController.name);
     constructor(private dataService: DataService) {}
 
-    @Roles(Role.USER)
+    @Roles(Role.SUPER_ADMIN)
     @UseGuards(RoleGuard)
     @UseGuards(AuthGuard)
     @Get('health')
-    getHealth(@Request() req){
-        return "OK";
-    }
-
-    @Get('formentry')
-    getFormentry(){
-        return this.dataService.getFormentry();
+    getHealthAdmin(@Req() req: Request, @Query() q){
+        return q['h'] == '1'? this.dataService.getFullServiceStatus() : this.dataService.getServiceStatus();
     }
 }
